@@ -18,6 +18,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"log"
 	"sync"
 	"time"
@@ -44,9 +45,32 @@ func NewPBGrpcClient(opt *runner.Options) runner.Client {
 			log.Fatalf("did not connect: %v", err)
 		}
 		return grpcg.NewEchoClient(conn)
-		//return grpcg.NewSEchoClient(conn)
 	}, opt.PoolSize)
 	return cli
+}
+
+func NewGrpcClient(opt *runner.Options) runner.Client {
+	conn, err := grpc.Dial(opt.Address, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	client := grpcg.NewSEchoClient(conn)
+	return &grpcSClient{
+		client: client,
+		streampool: &sync.Pool{New: func() interface{} {
+			stream, err := client.Echo(context.Background())
+			if err != nil {
+				log.Printf("client new stream failed: %v", err)
+				return nil
+			}
+			return stream
+		}},
+		reqPool: &sync.Pool{
+			New: func() interface{} {
+				return &grpcg.Request{}
+			},
+		},
+	}
 }
 
 type pbGrpcClient struct {
@@ -72,4 +96,33 @@ func (cli *pbGrpcClient) Echo(action, msg string) error {
 		runner.ProcessResponse(reply.Action, reply.Msg)
 	}
 	return err
+}
+
+type grpcSClient struct {
+	client     grpcg.SEchoClient
+	streampool *sync.Pool
+	reqPool    *sync.Pool
+}
+
+func (cli *grpcSClient) Echo(action, msg string) (err error) {
+	req := cli.reqPool.Get().(*grpcg.Request)
+	defer cli.reqPool.Put(req)
+
+	stream, ok := cli.streampool.Get().(grpcg.SEcho_EchoClient)
+	if !ok {
+		return errors.New("new stream error")
+	}
+	defer cli.streampool.Put(stream)
+	req.Action = action
+	req.Msg = msg
+	req.Content = content
+	if err := stream.Send(req); err != nil {
+		return err
+	}
+	resp, err := stream.Recv()
+	if err != nil {
+		return err
+	}
+	runner.ProcessResponse(resp.Action, resp.Msg)
+	return nil
 }
