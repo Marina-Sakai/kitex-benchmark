@@ -28,6 +28,8 @@ import (
 	"github.com/cloudwego/kitex-benchmark/runner"
 )
 
+const content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti."
+
 func NewGrpcClient(opt *runner.Options) runner.Client {
 	conn, err := grpc.Dial(opt.Address, grpc.WithInsecure())
 	if err != nil {
@@ -69,6 +71,7 @@ func (cli *grpcClient) Echo(action, msg string) (err error) {
 	defer cli.streampool.Put(stream)
 	req.Action = action
 	req.Msg = msg
+	req.Content = content
 	if err := stream.Send(req); err != nil {
 		return err
 	}

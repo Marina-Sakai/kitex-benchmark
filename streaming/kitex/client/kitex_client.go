@@ -31,6 +31,8 @@ import (
 	"github.com/cloudwego/kitex-benchmark/runner"
 )
 
+const content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti."
+
 func NewKClient(opt *runner.Options) runner.Client {
 	klog.SetLevel(klog.LevelWarn)
 	c := sechosvr.MustNewClient("test.echo.kitex",
@@ -76,6 +78,7 @@ func (cli *kClient) Echo(action, msg string) error {
 	defer cli.streampool.Put(stream)
 	req.Action = action
 	req.Msg = msg
+	req.Content = content
 	err := stream.Send(req)
 	if err != nil {
 		return err

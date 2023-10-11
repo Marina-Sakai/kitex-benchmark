@@ -50,8 +50,9 @@ func (s *EchoImpl) Echo(stream echo.SEcho_EchoServer) error {
 		resp := runner.ProcessRequest(recorder, req.Action, req.Msg)
 
 		err = stream.Send(&echo.Response{
-			Action: resp.Action,
-			Msg:    resp.Msg,
+			Action:  resp.Action,
+			Msg:     resp.Msg,
+			Content: req.Content,
 		})
 		if err != nil {
 			return err
