@@ -7,13 +7,13 @@ option go_package = "echo";
 message Request {
   string Action = 1;
   string Msg = 2;
-  string Data = 3;
+  string Content = 3;
 }
 
 message Response {
   string Action = 1;
   string Msg = 2;
-  string Data = 3;
+  string Content = 3;
 }
 
 //----------------------service-------------------
