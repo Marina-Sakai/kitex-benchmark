@@ -4,7 +4,7 @@ set -e
 # benchmark params
 srepo=("grpc" "kitex")
 crepo=("grpc" "kitex")
-ports=(8000 8001)
+ports=(8001 8002)
 
 CURDIR=$(cd $(dirname $0); pwd)
 echo "Checking whether the environment meets the requirements ..."

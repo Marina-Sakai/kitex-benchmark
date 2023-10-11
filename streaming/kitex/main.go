@@ -29,7 +29,7 @@ import (
 	"github.com/cloudwego/kitex-benchmark/runner"
 )
 
-const port = 8001
+const port = 8002
 
 var (
 	_ echo.SEcho = &EchoImpl{}
