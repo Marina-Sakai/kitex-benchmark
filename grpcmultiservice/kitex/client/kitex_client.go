@@ -26,13 +26,11 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/transport"
 
-	echo "github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/multi_echo"
-	echosvr "github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/multi_echo/echo"
-	sechosvr "github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/multi_echo/secho"
+	"github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/echo"
+	echosvr "github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/echo/echo"
+	sechosvr "github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/echo/secho"
 	"github.com/cloudwego/kitex-benchmark/runner"
 )
-
-const content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti."
 
 func NewKClient(opt *runner.Options) runner.Client {
 	klog.SetLevel(klog.LevelWarn)
@@ -90,7 +88,6 @@ func (cli *kClient) Echo(action, msg string) error {
 
 	req.Action = action
 	req.Msg = msg
-	req.Content = content
 
 	reply, err := cli.client.Echo(ctx, req)
 	if reply != nil {
@@ -116,7 +113,6 @@ func (cli *kSClient) Echo(action, msg string) error {
 	defer cli.streampool.Put(stream)
 	req.Action = action
 	req.Msg = msg
-	req.Content = content
 	err := stream.Send(req)
 	if err != nil {
 		return err

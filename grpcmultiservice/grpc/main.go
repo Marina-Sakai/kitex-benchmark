@@ -25,7 +25,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	grpcg "github.com/cloudwego/kitex-benchmark/codec/protobuf/multi_grpc_gen"
+	grpcg "github.com/cloudwego/kitex-benchmark/codec/protobuf/grpc_gen"
 	"github.com/cloudwego/kitex-benchmark/perf"
 	"github.com/cloudwego/kitex-benchmark/runner"
 )
@@ -44,9 +44,8 @@ func (s *server) Echo(ctx context.Context, req *grpcg.Request) (*grpcg.Response,
 	resp := runner.ProcessRequest(recorder, req.Action, req.Msg)
 
 	return &grpcg.Response{
-		Msg:     resp.Msg,
-		Action:  resp.Action,
-		Content: req.Content,
+		Msg:    resp.Msg,
+		Action: resp.Action,
 	}, nil
 }
 
@@ -66,9 +65,8 @@ func (s *sserver) Echo(stream grpcg.SEcho_EchoServer) error {
 		resp := runner.ProcessRequest(recorder, req.Action, req.Msg)
 
 		err = stream.Send(&grpcg.Response{
-			Msg:     resp.Msg,
-			Action:  resp.Action,
-			Content: req.Content,
+			Msg:    resp.Msg,
+			Action: resp.Action,
 		})
 		if err != nil {
 			log.Printf("stream send failed: %v\n", err)

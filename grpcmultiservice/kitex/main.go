@@ -24,9 +24,9 @@ import (
 
 	"github.com/cloudwego/kitex/server"
 
-	echo "github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/multi_echo"
-	echosvr "github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/multi_echo/echo"
-	sechosvr "github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/multi_echo/secho"
+	"github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/echo"
+	echosvr "github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/echo/echo"
+	sechosvr "github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/echo/secho"
 	"github.com/cloudwego/kitex-benchmark/perf"
 	"github.com/cloudwego/kitex-benchmark/runner"
 )
@@ -48,9 +48,8 @@ func (s *EchoImpl) Echo(ctx context.Context, req *echo.Request) (*echo.Response,
 	resp := runner.ProcessRequest(recorder, req.Action, req.Msg)
 
 	return &echo.Response{
-		Action:  resp.Action,
-		Msg:     resp.Msg,
-		Content: req.Content,
+		Action: resp.Action,
+		Msg:    resp.Msg,
 	}, nil
 }
 
@@ -66,9 +65,8 @@ func (s *SEchoImpl) Echo(stream echo.SEcho_EchoServer) error {
 		resp := runner.ProcessRequest(recorder, req.Action, req.Msg)
 
 		err = stream.Send(&echo.Response{
-			Action:  resp.Action,
-			Msg:     resp.Msg,
-			Content: req.Content,
+			Action: resp.Action,
+			Msg:    resp.Msg,
 		})
 		if err != nil {
 			return err
@@ -84,10 +82,6 @@ func main() {
 	svr := server.NewServer(server.WithServiceAddr(&net.TCPAddr{IP: net.IPv4zero, Port: port}))
 	svr.RegisterService(echosvr.NewServiceInfo(), new(EchoImpl))
 	svr.RegisterService(sechosvr.NewServiceInfo(), new(SEchoImpl))
-	//svr := echosvr.NewServer(
-	//	new(EchoImpl),
-	//	server.WithServiceAddr(&net.TCPAddr{IP: net.IPv4zero, Port: port}),
-	//)
 
 	if err := svr.Run(); err != nil {
 		log.Println(err.Error())

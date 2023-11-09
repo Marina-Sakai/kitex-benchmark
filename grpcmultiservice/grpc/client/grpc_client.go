@@ -25,11 +25,9 @@ import (
 
 	"google.golang.org/grpc"
 
-	grpcg "github.com/cloudwego/kitex-benchmark/codec/protobuf/multi_grpc_gen"
+	grpcg "github.com/cloudwego/kitex-benchmark/codec/protobuf/grpc_gen"
 	"github.com/cloudwego/kitex-benchmark/runner"
 )
-
-const content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti."
 
 func NewPBGrpcClient(opt *runner.Options) runner.Client {
 	cli := &pbGrpcClient{}
@@ -49,7 +47,7 @@ func NewPBGrpcClient(opt *runner.Options) runner.Client {
 	return cli
 }
 
-func NewGrpcClient(opt *runner.Options) runner.Client {
+func NewPBSGrpcClient(opt *runner.Options) runner.Client {
 	conn, err := grpc.Dial(opt.Address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -85,7 +83,6 @@ func (cli *pbGrpcClient) Echo(action, msg string) error {
 
 	req.Action = action
 	req.Msg = msg
-	req.Content = content
 
 	pbcli := cli.connpool.Get().(grpcg.EchoClient)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -115,7 +112,6 @@ func (cli *grpcSClient) Echo(action, msg string) (err error) {
 	defer cli.streampool.Put(stream)
 	req.Action = action
 	req.Msg = msg
-	req.Content = content
 	if err := stream.Send(req); err != nil {
 		return err
 	}

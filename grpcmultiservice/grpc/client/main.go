@@ -23,5 +23,5 @@ import (
 // main is use for routing.
 func main() {
 	runner.Main("GRPC", NewPBGrpcClient)
-	runner.Main("GRPC", NewGrpcClient)
+	//runner.Main("GRPC", NewPBSGrpcClient)
 }
