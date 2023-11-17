@@ -51,6 +51,8 @@ type Response struct {
 	Data    [][]byte
 }
 
+const oneHundredBData = "a7X4Sj0uvV1Jtcq8lRQwLl3TbOoIhYLfE7jI2ACv9ZIsM6yN4HxCyOZyKJ2hrjKL6GZsCJ93Vp4dxQz1thWAgO41mLn8kXq2iIQb8"
+
 func initFlags() {
 	flag.StringVar(&address, "addr", "127.0.0.1:8000", "client call address")
 	flag.IntVar(&echoSize, "b", 1024, "echo size once")
@@ -94,7 +96,7 @@ func Main(name string, newer ClientNewer) {
 	r.Warmup(handler, concurrent, 100*1000)
 
 	// === beginning ===
-	if err := cli.OperateCacheString(BeginAction, "empty"); err != nil {
+	if err := cli.OperateCacheString(BeginAction, oneHundredBData); err != nil {
 		log.Fatalf("beginning server failed: %v", err)
 	}
 	recorder := perf.NewRecorder(fmt.Sprintf("%s@Client", name))
@@ -105,7 +107,7 @@ func Main(name string, newer ClientNewer) {
 
 	// == ending ===
 	recorder.End()
-	if err := cli.OperateCacheString(EndAction, "empty"); err != nil {
+	if err := cli.OperateCacheString(EndAction, oneHundredBData); err != nil {
 		log.Fatalf("ending server failed: %v", err)
 	}
 
