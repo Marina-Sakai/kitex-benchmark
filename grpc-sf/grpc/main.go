@@ -17,48 +17,35 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"io"
 	"log"
 	"net"
 
 	"google.golang.org/grpc"
 
-	grpcg "github.com/cloudwego/kitex-benchmark/codec/protobuf/grpc_gen"
+	grpcg "github.com/cloudwego/kitex-benchmark/codec/protobuf/cache_gen"
 	"github.com/cloudwego/kitex-benchmark/perf"
-	"github.com/cloudwego/kitex-benchmark/runner"
+	"github.com/cloudwego/kitex-benchmark/runner-sf"
 )
 
 const (
-	port = 8002
+	port = 8001
 )
 
 var recorder = perf.NewRecorder("GRPC@Server")
 
 type server struct {
-	grpcg.UnimplementedSEchoServer
+	grpcg.UnimplementedRuntimeCacheServer
 }
 
-func (s *server) Echo(stream grpcg.SEcho_EchoServer) error {
-	for {
-		req, err := stream.Recv()
-		if err != nil {
-			if err == io.EOF {
-				return nil
-			}
-			return err
-		}
-		resp := runner.ProcessRequest(recorder, req.Action, req.Msg)
+func (s *server) OperateCacheString(ctx context.Context, req *grpcg.OpCacheStringRequest) (*grpcg.OpCacheResponse, error) {
+	resp := runner.ProcessRequest(recorder, req.Command, req.Name)
 
-		err = stream.Send(&grpcg.Response{
-			Msg:    resp.Msg,
-			Action: resp.Action,
-		})
-		if err != nil {
-			log.Printf("stream send failed: %v\n", err)
-			return err
-		}
-	}
+	return &grpcg.OpCacheResponse{
+		Success: resp.Success,
+		Data:    resp.Data,
+	}, nil
 }
 
 func main() {
@@ -72,7 +59,7 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	grpcg.RegisterSEchoServer(s, &server{})
+	grpcg.RegisterRuntimeCacheServer(s, &server{})
 	log.Printf("server listening at %v", lis.Addr())
 
 	if err := s.Serve(lis); err != nil {

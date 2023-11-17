@@ -8,7 +8,7 @@ echo "Check finished."
 
 srepo=("grpc" "kitex")
 crepo=("grpc" "kitex")
-ports=(8000 8006)
+ports=(8001 8006)
 
 echo "Building grpc services by exec build_grpc.sh..."
 source $CURDIR/build_grpc.sh
@@ -32,7 +32,7 @@ for b in ${body[@]}; do
 
       # stop server
       pid=$(ps -ef | grep ${srp}_reciever | grep -v grep | awk '{print $2}')
-      disown $pid
+      # disown $pid
       kill -9 $pid
       echo "Server [$srp] stopped, pid [$pid]."
       sleep 1

@@ -1,0 +1,22 @@
+syntax = "proto3";
+//option go_package = "mosn.io/layotto/cmd/layotto_multiple_api/runtime/component;component";
+option go_package = "cache_gen/";
+option java_outer_classname = "CacheProto";
+option java_package = "spec.proto.runtime.cache.v1";
+
+service RuntimeCache {
+  //操作单元组接口
+  rpc OperateCacheString(OpCacheStringRequest)  returns(OpCacheResponse){}
+}
+
+message OpCacheStringRequest{
+  string name = 1;
+  string command = 2;
+  repeated bytes args = 3;
+}
+
+message OpCacheResponse{
+  bool success = 1;
+  string errorMessage = 2;
+  repeated bytes data = 3;
+}

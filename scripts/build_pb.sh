@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+CURDIR=$(cd $(dirname $0); pwd)
 GOEXEC=${GOEXEC:-"go"}
 
 # clean

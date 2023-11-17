@@ -6,14 +6,13 @@ echo "Checking whether the environment meets the requirements ..."
 source $CURDIR/env.sh
 echo "Check finished."
 
-srepo=("grpc" "kitex" "kitex-mux" "rpcx" "arpc")
-crepo=("grpc" "kitex" "kitex-mux" "rpcx" "arpc")
-ports=(8006 8001 8002 8003 8004)
+srepo=("grpc" "kitex")
+crepo=("grpc" "kitex")
+ports=(8001 8006)
 
-echo "Building pb services by exec build_pb.sh..."
-source $CURDIR/build_pb.sh
+echo "Building grpc services by exec build_grpc.sh..."
+source $CURDIR/build_grpc_sf.sh
 echo "Build finished."
-
 # benchmark
 for b in ${body[@]}; do
   for c in ${concurrent[@]}; do

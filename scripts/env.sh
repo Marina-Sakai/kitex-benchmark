@@ -60,6 +60,7 @@ output_dir=$CURDIR/../output
 pb_dir=$CURDIR/../protobuf
 thrift_dir=$CURDIR/../thrift
 grpc_dir=$CURDIR/../grpc
+grpc_sf_dif=$CURDIR/.../grpc-sf
 multi_service_grpc_dir=$CURDIR/../grpcmultiservice
 streaming_dir=$CURDIR/../streaming
 generic_dir=$CURDIR/../generic
