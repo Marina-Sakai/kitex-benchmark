@@ -25,7 +25,7 @@ import (
 	"google.golang.org/grpc"
 
 	grpcg "github.com/cloudwego/kitex-benchmark/codec/protobuf/cache_gen"
-	"github.com/cloudwego/kitex-benchmark/runner-sf"
+	"github.com/cloudwego/kitex-benchmark/runner_sf"
 )
 
 func NewPBGrpcClient(opt *runner.Options) runner.Client {

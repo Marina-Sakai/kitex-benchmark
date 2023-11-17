@@ -26,7 +26,7 @@ import (
 
 	"github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/cache"
 	cachesvr "github.com/cloudwego/kitex-benchmark/codec/protobuf/kitex_gen/cache/runtimecache"
-	"github.com/cloudwego/kitex-benchmark/runner-sf"
+	"github.com/cloudwego/kitex-benchmark/runner_sf"
 )
 
 func NewKClient(opt *runner.Options) runner.Client {

@@ -26,7 +26,7 @@ import (
 
 	grpcg "github.com/cloudwego/kitex-benchmark/codec/protobuf/cache_gen"
 	"github.com/cloudwego/kitex-benchmark/perf"
-	"github.com/cloudwego/kitex-benchmark/runner-sf"
+	"github.com/cloudwego/kitex-benchmark/runner_sf"
 )
 
 const (

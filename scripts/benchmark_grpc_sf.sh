@@ -10,7 +10,7 @@ srepo=("grpc" "kitex")
 crepo=("grpc" "kitex")
 ports=(8001 8006)
 
-echo "Building grpc services by exec build_grpc.sh..."
+echo "Building grpc services by exec build_grpc_sf.sh..."
 source $CURDIR/build_grpc_sf.sh
 echo "Build finished."
 # benchmark
